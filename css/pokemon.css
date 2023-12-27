@@ -1,0 +1,10 @@
+:root {
+    --pokemon_small_width: 200px;
+    --pokemon_small_height: 400px;
+}
+
+.pokemon_smallcard {
+    width: var(--pokemon_small_width);
+    height: var(--pokemon_small_height);
+    border: 1px solid black;
+}
