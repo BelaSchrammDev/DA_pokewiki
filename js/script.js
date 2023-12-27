@@ -1,3 +1,4 @@
+
 function init() {
     includeHTML();
     initPokemons();
@@ -17,4 +18,22 @@ async function includeHTML() {
             element.innerHTML = 'Page not found';
         }
     }
+}
+
+
+function stopPageScrolling() {
+    document.body.addEventListener('wheel', preventScroll, {passive: false});
+}
+
+
+function allowPageScrolling() {
+    document.body.removeEventListener('wheel', preventScroll, {passive: false});
+}
+
+
+
+function preventScroll(e){
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
 }
