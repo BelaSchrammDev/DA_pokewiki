@@ -6,6 +6,10 @@ const loadCount = 30;
 async function initPokemons() {
     await loadPokemonList()
     renderNextPokemons();
+    window.addEventListener('scroll', () => {
+        const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+        if (lastShowPokemon < all_PokeMons.length && (scrollTop + clientHeight) >= scrollHeight - 200) renderNextPokemons();
+    });
 }
 
 
@@ -31,8 +35,10 @@ async function loadPokemonList() {
 
 
 async function renderNextPokemons() {
-    const loadLimit = lastShowPokemon + loadCount;
-    for (let i = lastShowPokemon; i < all_PokeMons.length && i < loadLimit; i++, lastShowPokemon++) {
+    const loadEnd = lastShowPokemon + loadCount;
+    const loadBegin = lastShowPokemon;
+    lastShowPokemon = loadEnd;
+    for (let i = loadBegin; i < all_PokeMons.length && i < loadEnd; i++) {
         document.getElementById('main_content').innerHTML += getNewEmptyCard(all_PokeMons[i].name);
         renderSinglePokemon(all_PokeMons[i].name);
     }
