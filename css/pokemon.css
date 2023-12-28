@@ -1,10 +1,62 @@
 :root {
-    --pokemon_small_width: 200px;
-    --pokemon_small_height: 400px;
+    --pokemon_small_width: 150px;
+    --pokemon_small_height: 300px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .pokemon_smallcard {
     width: var(--pokemon_small_width);
     height: var(--pokemon_small_height);
     border: 1px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.pokemon_bigcard {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    width: 400px;
+    height: 400px;
+    z-index: 110;
+}
+
+.pokemon_smallcard:hover {
+    cursor: pointer;
+    -webkit-box-shadow: 5px 5px 15px 5px #000000;
+    box-shadow: 5px 5px 15px 5px #000000;
+}
+
+
+.pokemon_innercard {
+    --card_width: calc(var(--pokemon_small_width)-20px);
+    --card_height: calc(var(--pokemon_small_height)-20px);
+    width: var(--card_width);
+    height: var(--card_height);
+    min-width: var(--card_width);
+    min-height: var(--card_height);
+    padding: 10px;
+}
+
+.pokemon_image {
+    width: 80%;
+    margin: auto;
+    height: auto;
+    border-radius: 40%;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+}
+
+.pokemon_name {
+    text-align: center;
 }

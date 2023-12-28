@@ -13,16 +13,18 @@
     <link rel="stylesheet" href="./css/pokemon.css">
     <script src="./js/script.js"></script>
     <script src="./js/pokemons.js"></script>
-    <link rel="shortcut icon" href="./img/pikachu.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./img/pokemon.png" type="image/x-icon">
 </head>
 
 <body onload="init()">
 
-    <header w3-include-html="./templates/header.html"></header>
-
-    <section id="main_content" class="my_container flex_r_jce_ace flex_gap_2 flex_wrap p_2">
+    <section onclick="clickOverlay()" id="overlay" class="overlay" style="display: none;">
 
     </section>
+
+    <header w3-include-html="./templates/header.html"></header>
+
+    <section id="main_content" class="my_container flex_r_jce_ace flex_gap_2 flex_wrap p_2"></section>
 
     <footer w3-include-html="./templates/footer.html"></footer>
 
