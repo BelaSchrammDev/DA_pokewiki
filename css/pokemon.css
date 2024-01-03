@@ -1,6 +1,6 @@
 :root {
     --pokemon_small_width: 150px;
-    --pokemon_small_height: 300px;
+    --pokemon_small_height: 250px;
 }
 
 .overlay {
@@ -21,15 +21,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-}
-
-.pokemon_bigcard {
-    position: fixed;
-    top: 100px;
-    left: 100px;
-    width: 400px;
-    height: 400px;
-    z-index: 110;
+    transition: box-shadow var(--main_anim_delay) ease-in-out;
 }
 
 .pokemon_smallcard:hover {
@@ -38,15 +30,20 @@
     box-shadow: 5px 5px 15px 5px #000000;
 }
 
-
 .pokemon_innercard {
-    --card_width: calc(var(--pokemon_small_width)-20px);
-    --card_height: calc(var(--pokemon_small_height)-20px);
+    --card_padding: 10px;
+    --card_delta: calc(var(--card_padding) * 2);
+    --card_height: calc(var(--pokemon_small_height) - var(--card_delta));
+    --card_width: calc(var(--pokemon_small_width) - var(--card_delta));
+
     width: var(--card_width);
     height: var(--card_height);
-    min-width: var(--card_width);
-    min-height: var(--card_height);
-    padding: 10px;
+    padding: var(--card_padding);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
 }
 
 .pokemon_image {

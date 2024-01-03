@@ -2,12 +2,12 @@
     --main_color: black;
     --main_color_highlight: orange;
     --main_bg_color: white;
-    --main_bg_color_highlight: lightgrey;
+    --main_bg_color_highlight: #E41F25;
 
     --main_header_bg_color: white;
     --main_footer_bg_color: gray;
 
-    --header_hight: 80px;
+    --header_hight: 50px;
     --header_box_shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.37);
 
     --footer_min_height: 100px;
@@ -64,14 +64,17 @@ body {
 
 header {
     background-color: var(--main_header_bg_color);
+    background-image: linear-gradient(to right, var(--main_bg_color_highlight), var(--main_bg_color));
     box-shadow: var(--header_box_shadow);
     height: var(--header_hight);
     display: flex;
     align-items: stretch;
+    position: sticky;
+    top: 0;
 }
 
 header span {
-    color: var(--main_color_highlight);
+    color: var(--main_color);
     vertical-align: middle;
 }
 
@@ -92,4 +95,3 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
-
