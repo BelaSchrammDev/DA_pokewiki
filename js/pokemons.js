@@ -114,7 +114,7 @@ function renderPokemonsByFilter(filter) {
         const pokemonName = all_PokeMons[i].name;
         if (pokemonName.includes(filter)) {
             document.getElementById('main_content').innerHTML += getNewEmptyCard(pokemonName);
-            renderSinglePokemon(all_PokeMons[i]);
+            renderSinglePokemonByID(all_PokeMons[i]);
         }
     }
 }
