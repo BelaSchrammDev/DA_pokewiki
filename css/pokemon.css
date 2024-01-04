@@ -31,7 +31,7 @@
 }
 
 .pokemon_innercard {
-    --card_padding: 10px;
+    --card_padding: 5px;
     --card_delta: calc(var(--card_padding) * 2);
     --card_height: calc(var(--pokemon_small_height) - var(--card_delta));
     --card_width: calc(var(--pokemon_small_width) - var(--card_delta));
@@ -50,10 +50,16 @@
     width: 80%;
     margin: auto;
     height: auto;
-    border-radius: 40%;
-    background-image: radial-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+    border-radius: 10px;
+    border: 1px solid black;
 }
 
 .pokemon_name {
     text-align: center;
+}
+
+.pokemon_types>span {
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid black;
 }

@@ -32,6 +32,17 @@ async function initPokemons() {
 }
 
 
+// get the pokemon JSON Object
+// save the loadet pokemons in array, for later use, it is needed
+async function getPokemonObjectByID(pokemonID) {
+    if (!allPokemonJsons[pokemonID.name]) {
+        let response = await fetch(pokemonID.url);
+        allPokemonJsons[pokemonID.name] = await response.json();
+    }
+    return allPokemonJsons[pokemonID.name];
+}
+
+
 function addLoadByScrollBehavior() {
     window.addEventListener('scroll', () => {
         const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -44,7 +55,6 @@ async function renderSinglePokemonByID(pokemonID) {
     const pokemon = await getPokemonObjectByID(pokemonID);
     const card = document.getElementById(pokemonID.name);
     card.innerHTML += getPokemonCardHTML(pokemon);
-    card.style = `background-color: ${getPokemonMainTypeColor(pokemon)}`;
 }
 
 
@@ -55,15 +65,17 @@ function getPascalCaseWord(word) {
 
 function getPokemonCardHTML(pokemon) {
     return `
-        <img class="pokemon_image" src="${pokemon['sprites']['front_default']}">
+        <img class="pokemon_image" src="${pokemon['sprites']['front_default']}"
+        style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon, 0)} 100%">
         <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon['name'])}</span>
         ${getPokemonTypesHTML(pokemon)}
     `;
 }
 
 
-function getPokemonMainTypeColor(pokemon) {
-    const firstType = pokemon.types[0].type;
+function getPokemonTypeColor(pokemon, slot) {
+    if (slot > pokemon.types.length - 1) return '#FFFFFF';
+    const firstType = pokemon.types[slot].type;
     if (firstType && typeColors.hasOwnProperty(firstType.name)) return typeColors[firstType.name];
     else typeColors.normal;
 }
@@ -73,9 +85,14 @@ function getPokemonTypesHTML(pokemon) {
     let typesHTML = '';
     for (let index = 0; index < pokemon.types.length; index++) {
         const type = pokemon.types[index].type;
-        typesHTML += `<span>${type.name}</span>`;
+        typesHTML += `<span style="background-color: ${getPokemonTypeColor(pokemon, index)}">${type.name}</span>`;
     }
-    return `<div class="${pokemon.types.length > 1 ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">${typesHTML}</div>`;
+    return `
+        <span class="font_16b p_1 border_t_b_1">Types</span>
+        <div class="pokemon_types ${pokemon.types.length > 1 ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">
+            ${typesHTML}
+        </div>
+    `;
 }
 
 
@@ -99,10 +116,29 @@ function renderNextPokemons() {
     const loadBegin = lastShowPokemon;
     const loadEnd = lastShowPokemon + loadCount;
     lastShowPokemon = loadEnd;
+    addNextEmptyCards(loadBegin, loadEnd);
     for (let i = loadBegin; i < all_PokeMons.length && i < loadEnd; i++) {
-        document.getElementById('main_content').innerHTML += getNewEmptyCard(all_PokeMons[i].name);
         renderSinglePokemonByID(all_PokeMons[i]);
     }
+}
+
+
+// for speed up the loading of pokemons
+function addNextEmptyCards(loadBegin, loadEnd) {
+    let cardsHTML = '';
+    for (let i = loadBegin; i < all_PokeMons.length && i < loadEnd; i++) {
+        cardsHTML += getNewEmptyCard(all_PokeMons[i].name);
+    }
+    document.getElementById('main_content').innerHTML += cardsHTML;
+}
+
+
+function getNewEmptyCard(pokemonID) {
+    return `
+        <div id="div_${pokemonID}" onclick="clickPokemonSmallCard('${pokemonID}')" class="pokemon_smallcard">
+            <div class="pokemon_innercard" id="${pokemonID}"></div>
+        </div>
+        `;
 }
 
 
@@ -115,18 +151,9 @@ function renderPokemonsByFilter(filter) {
         if (pokemonName.includes(filter)) {
             document.getElementById('main_content').innerHTML += getNewEmptyCard(pokemonName);
             renderSinglePokemonByID(all_PokeMons[i]);
-        }
-    }
-}
-
-
-function getNewEmptyCard(pokemonID) {
-    return `
-        <div id="div_${pokemonID}" onclick="clickPokemonSmallCard('${pokemonID}')" class="pokemon_smallcard">
-            <div class="pokemon_innercard" id="${pokemonID}"></div>
-        </div>
-        `;
-}
+        }    
+    }    
+}    
 
 
 function clickPokemonSmallCard(pokemonID) {
@@ -140,12 +167,4 @@ function clickOverlay() {
     allowPageScrolling();
 }
 
-
-async function getPokemonObjectByID(pokemonID) {
-    if (!allPokemonJsons[pokemonID.name]) {
-        let response = await fetch(pokemonID.url);
-        allPokemonJsons[pokemonID.name] = await response.json();
-    }
-    return allPokemonJsons[pokemonID.name];
-}
 
