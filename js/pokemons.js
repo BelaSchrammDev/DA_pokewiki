@@ -58,18 +58,26 @@ async function renderSinglePokemonByID(pokemonID) {
 }
 
 
+function getPokemonCardHTML(pokemon) {
+    return `
+        <img class="pokemon_image" src="${getPokemonImageUrlOrDefault(pokemon)}"
+        style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon, 0)} 100%">
+        <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon['name'])}</span>
+        ${getPokemonTypesHTML(pokemon)}
+    `;
+}
+
+
 function getPascalCaseWord(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
 
-function getPokemonCardHTML(pokemon) {
-    return `
-        <img class="pokemon_image" src="${pokemon['sprites']['front_default']}"
-        style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon, 0)} 100%">
-        <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon['name'])}</span>
-        ${getPokemonTypesHTML(pokemon)}
-    `;
+// some pokemons are missing sprites
+// in this case the default image is loaded
+function getPokemonImageUrlOrDefault(pokemon){
+    const imgURL = pokemon['sprites']['front_default'];
+    return imgURL ? imgURL : './img/pokemon.png';
 }
 
 
