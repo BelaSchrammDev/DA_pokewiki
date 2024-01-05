@@ -36,10 +36,44 @@ async function initPokemons() {
 // save the loadet pokemons in array, for later use, it is needed
 async function getPokemonObjectByID(pokemonID) {
     if (!allPokemonJsons[pokemonID.name]) {
-        let response = await fetch(pokemonID.url);
-        allPokemonJsons[pokemonID.name] = await response.json();
+        let speciesJSON = await fetchAndGetJSON(pokemonID.url);
+        let evolutionJSON = await fetchAndGetJSON(speciesJSON.evolution_chain.url);
+        let pokemonJSON = await fetchAndGetJSON('https://pokeapi.co/api/v2/pokemon/' + speciesJSON.id);
+        allPokemonJsons[pokemonID.name] = createNewPokemonObject(speciesJSON, pokemonJSON, evolutionJSON);
     }
     return allPokemonJsons[pokemonID.name];
+}
+
+
+async function fetchAndGetJSON(url) {
+    let response = await fetch(url);
+    return await response.json();
+}
+
+
+// pull all required data from the api into a separate object
+function createNewPokemonObject(species, pokemon, evolution) {
+    let newPokemonObject = new Object();
+    newPokemonObject.id = species.id;
+    newPokemonObject.name = species.name;
+    newPokemonObject.type1 = pokemon.types[0].type.name;
+    newPokemonObject.type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : '';
+    newPokemonObject.image = getPokemonImageUrlOrDefault(pokemon);
+    newPokemonObject.evolutions = getEvolutionsArray(evolution);
+    return newPokemonObject;
+}
+
+
+function getEvolutionsArray(evolution) {
+    let evoArray = [];
+    evoArray.push(evolution.chain.species.name);
+    if (evolution.chain.evolves_to.length > 0) {
+        evoArray.push(evolution.chain.evolves_to[0].species.name);
+        if (evolution.chain.evolves_to[0].evolves_to.length > 0) {
+            evoArray.push(evolution.chain.evolves_to[0].evolves_to[0].species.name);
+        }
+    }
+    return evoArray;
 }
 
 
@@ -60,9 +94,9 @@ async function renderSinglePokemonByID(pokemonID) {
 
 function getPokemonCardHTML(pokemon) {
     return `
-        <img class="pokemon_image" src="${getPokemonImageUrlOrDefault(pokemon)}"
-        style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon, 0)} 100%">
-        <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon['name'])}</span>
+        <img class="pokemon_image" src="${pokemon.image}"
+        style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon.type1)} 100%">
+        <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon.name)}</span>
         ${getPokemonTypesHTML(pokemon)}
     `;
 }
@@ -75,37 +109,38 @@ function getPascalCaseWord(word) {
 
 // some pokemons are missing sprites
 // in this case the default image is loaded
-function getPokemonImageUrlOrDefault(pokemon){
+function getPokemonImageUrlOrDefault(pokemon) {
     const imgURL = pokemon['sprites']['front_default'];
     return imgURL ? imgURL : './img/pokemon.png';
 }
 
 
-function getPokemonTypeColor(pokemon, slot) {
-    if (slot > pokemon.types.length - 1) return '#FFFFFF';
-    const firstType = pokemon.types[slot].type;
-    if (firstType && typeColors.hasOwnProperty(firstType.name)) return typeColors[firstType.name];
+function getPokemonTypeColor(type) {
+    if (type == undefined) return '#FFFFFF';
+    if (typeColors.hasOwnProperty(type)) return typeColors[type];
     else typeColors.normal;
 }
 
 
 function getPokemonTypesHTML(pokemon) {
-    let typesHTML = '';
-    for (let index = 0; index < pokemon.types.length; index++) {
-        const type = pokemon.types[index].type;
-        typesHTML += `<span style="background-color: ${getPokemonTypeColor(pokemon, index)}">${type.name}</span>`;
-    }
+    let typesHTML = getTypeSpan(pokemon.type1) + getTypeSpan(pokemon.type2);
     return `
         <span class="font_16b p_1 border_t_b_1">Types</span>
-        <div class="pokemon_types ${pokemon.types.length > 1 ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">
+        <div class="pokemon_types ${pokemon.type2 ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">
             ${typesHTML}
         </div>
     `;
 }
 
 
+function getTypeSpan(type) {
+    if (type == '') return '';
+    return `<span style="background-color: ${getPokemonTypeColor(type)}">${type}</span>`
+}
+
+
 async function loadPokemonList() {
-    const url = `https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`;
+    const url = `https://pokeapi.co/api/v2/pokemon-species?limit=100000&offset=0`;
     let response = await fetch(url);
     let responseAsJson = await response.json();
     all_PokeMons = responseAsJson.results;
@@ -159,9 +194,9 @@ function renderPokemonsByFilter(filter) {
         if (pokemonName.includes(filter)) {
             document.getElementById('main_content').innerHTML += getNewEmptyCard(pokemonName);
             renderSinglePokemonByID(all_PokeMons[i]);
-        }    
-    }    
-}    
+        }
+    }
+}
 
 
 function clickPokemonSmallCard(pokemonID) {
