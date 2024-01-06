@@ -56,16 +56,22 @@ function createNewPokemonObject(species, pokemon, evolution) {
     let newPokemonObject = new Object();
     newPokemonObject.id = species.id;
     newPokemonObject.name = species.name;
-    newPokemonObject.type1 = pokemon.types[0].type.name;
-    newPokemonObject.type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : '';
+    addPokemonTypes(newPokemonObject, pokemon);
     newPokemonObject.image = getPokemonImageUrlOrDefault(pokemon);
     newPokemonObject.evolutions = getEvolutionsArray(evolution);
     return newPokemonObject;
 }
 
 
+function addPokemonTypes(newPokemonObject, pokemon) {
+    newPokemonObject.type1 = pokemon.types[0].type.name;
+    newPokemonObject.type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : '';
+}
+
+
 function getEvolutionsArray(evolution) {
     let evoArray = [];
+
     evoArray.push(evolution.chain.species.name);
     if (evolution.chain.evolves_to.length > 0) {
         evoArray.push(evolution.chain.evolves_to[0].species.name);

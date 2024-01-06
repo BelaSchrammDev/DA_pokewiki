@@ -1,6 +1,6 @@
 :root {
     --main_color: black;
-    --main_color_highlight: orange;
+    --main_border_color: rgb(163, 163, 163);
     --main_bg_color: white;
     --main_bg_color_highlight: #E41F25;
 

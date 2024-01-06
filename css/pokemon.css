@@ -16,7 +16,7 @@
 .pokemon_smallcard {
     width: var(--pokemon_small_width);
     height: var(--pokemon_small_height);
-    border: 1px solid black;
+    border: 1px solid var(--main_border_color);
     border-radius: 10px;
     overflow: hidden;
     display: flex;
@@ -51,7 +51,7 @@
     margin: auto;
     height: auto;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--main_border_color);
 }
 
 .pokemon_name {
@@ -61,5 +61,5 @@
 .pokemon_types>span {
     border-radius: 5px;
     padding: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--main_border_color);
 }
