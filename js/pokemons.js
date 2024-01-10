@@ -107,7 +107,12 @@ function getPokemonCardHTML(pokemon) {
     `;
 }
 
-
+/**
+ * converts a string to pascalcase
+ * 
+ * @param {string} word - string that be converted
+ * @returns - to pascalcase converted string
+ */
 function getPascalCaseWord(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
