@@ -49,7 +49,7 @@ function scrollBehavior() {
     const scrollContainer = document.getElementById('pokemon_infos');
     scrollContainer.addEventListener('wheel', function (event) {
         event.preventDefault();
-        scrollContainer.scrollTop += event.deltaY;
+        scrollContainer.scrollTop += event.deltaY / 10;
     });
 
     scrollContainer.addEventListener('touchstart', function (event) {
