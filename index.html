@@ -19,13 +19,84 @@
 
 <body onload="init()">
 
-    <section onclick="clickOverlay()" id="overlay" class="overlay" style="display: none;">
+    <section onclick="clickOverlay()" id="overlay" class="overlay flex_r_jce_ace" style="display: none;"></section>
 
-    </section>
+    <div onclick="clickPokemonBigInfo(event)" id="pokemon_biginfo" class="pokemon_biginfo flex_c_jfs_ast">
+        <div class="border_b_b_1 pokemon_big_nameandimage flex_r_jfs_ace flex_gap_2 p_2 m_2">
+            <img id="pokemon_big_image" src="./img/pokemon.png">
+            <span id="pokemon_big_name" class="font_24b">Name</span>
+            <div class="flex_ast flex_grow_1 flex_r_jfe_afs">
+                <img onclick="clickOverlay()" src="./img/cancel.svg" alt="">
+            </div>
+        </div>
+        <div id="pokemon_infos" class="pokemon_infos">
+            <div class="pokemon_infobox flex_c_jfs_ast flex_gap_3 p_2 m_2">
+                <span class="border_b_b_1 font_24b flex_ace">Basics</span>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Type Slot 1:</span>
+                    <span id="pokemon_big_type1" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Type Slot 2:</span>
+                    <span id="pokemon_big_type2" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Height:</span>
+                    <span id="pokemon_big_height" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Weight:</span>
+                    <span id="pokemon_big_weight" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Base Happiness:</span>
+                    <span id="pokemon_big_base_happiness" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Capturerate:</span>
+                    <span id="pokemon_big_capture_rate" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Hatchcounter:</span>
+                    <span id="pokemon_big_hatch_counter" class="font_16b"></span>
+                </div>
+            </div>
+            <div class="pokemon_infobox flex_c_jfs_ast flex_gap_3 p_2 m_2">
+                <span class="border_b_b_1 font_24b flex_ace">Stats</span>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">HP:</span>
+                    <span id="pokemon_big_hp" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Attack:</span>
+                    <span id="pokemon_big_attack" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Defence:</span>
+                    <span id="pokemon_big_defense" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Special Attack:</span>
+                    <span id="pokemon_big_special-attack" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Special Defence:</span>
+                    <span id="pokemon_big_special-defense" class="font_16b"></span>
+                </div>
+                <div class="flex_r_jsb_ace">
+                    <span class="font_16b">Speed:</span>
+                    <span id="pokemon_big_speed" class="font_16b"></span>
+                </div>
+            </div>
+            <div class="pokemon_infobox flex_c_jfs_ast p_2 m_2">
+                <span class="border_b_b_1 font_24b flex_ace">Evolutions</span>
+            </div>
+        </div>
+    </div>
 
     <header w3-include-html="./templates/header.html"></header>
 
-    <section class="my_container">
+    <section id="main_view" class="my_container">
         <section id="main_content" class="flex_r_jce_afs flex_gap_2 flex_wrap p_2"></section>
     </section>
 

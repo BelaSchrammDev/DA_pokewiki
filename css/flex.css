@@ -318,3 +318,21 @@ ZZZ align-items:
     flex-wrap: wrap;
 }
 
+/* ---------------------------------------- */
+/* align-self */
+
+.flex_ast {
+    align-self: stretch;
+}
+
+.flex_ace {
+    align-self: center;
+}
+
+.flex_afs {
+    align-self: flex-start;
+}
+
+.flex_afe {
+    align-self: flex-end;
+}

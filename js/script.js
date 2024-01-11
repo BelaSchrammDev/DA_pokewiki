@@ -1,3 +1,5 @@
+let startY;
+
 
 function init() {
     includeHTML();
@@ -22,18 +24,42 @@ async function includeHTML() {
 
 
 function stopPageScrolling() {
-    document.body.addEventListener('wheel', preventScroll, {passive: false});
+    const element = document.getElementById('overlay');
+    document.body.addEventListener('wheel', preventScroll, { passive: false });
+    document.body.addEventListener('touchmove', preventScroll, { passive: false });
+    scrollBehavior();
 }
 
 
 function allowPageScrolling() {
-    document.body.removeEventListener('wheel', preventScroll, {passive: false});
+    const element = document.getElementById('overlay');
+    document.body.removeEventListener('wheel', preventScroll, { passive: false });
+    document.body.removeEventListener('touchmove', preventScroll, { passive: false });
 }
 
 
-
-function preventScroll(e){
+function preventScroll(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
+}
+
+
+function scrollBehavior() {
+    const scrollContainer = document.getElementById('pokemon_infos');
+    scrollContainer.addEventListener('wheel', function (event) {
+        event.preventDefault();
+        scrollContainer.scrollTop += event.deltaY;
+    });
+
+    scrollContainer.addEventListener('touchstart', function (event) {
+        startY = event.touches[0].clientY;
+    });
+
+    scrollContainer.addEventListener('touchmove', function (event) {
+        event.preventDefault();
+        const deltaY = event.touches[0].clientY - startY;
+        scrollContainer.scrollTop -= deltaY;
+        startY = event.touches[0].clientY;
+    });
 }

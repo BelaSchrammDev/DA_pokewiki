@@ -54,18 +54,39 @@ async function fetchAndGetJSON(url) {
 // pull all required data from the api into a separate object
 function createNewPokemonObject(species, pokemon, evolution) {
     let newPokemonObject = new Object();
-    newPokemonObject.id = species.id;
-    newPokemonObject.name = species.name;
+    newPokemonObject.name = getPascalCaseWord(species.name);
     addPokemonTypes(newPokemonObject, pokemon);
+    copyPropertys(newPokemonObject, species, ['id', 'base_happiness', 'capture_rate', 'hatch_counter']);
+    copyPropertys(newPokemonObject, pokemon, ['height', 'weight']);
+    copyStats(newPokemonObject, pokemon.stats);
     newPokemonObject.image = getPokemonImageUrlOrDefault(pokemon);
     newPokemonObject.evolutions = getEvolutionsArray(evolution);
     return newPokemonObject;
 }
 
 
+function copyStats(newPokemonObject, stats) {
+    let stat_maxvalue = 0;
+    for (let index = 0; index < stats.length; index++) {
+        const statItem = stats[index];
+        newPokemonObject[statItem.stat.name] = statItem.base_stat;
+        if (stat_maxvalue < statItem.base_stat) stat_maxvalue = statItem.base_stat;
+    }
+    newPokemonObject['stat_maxvalue'] = stat_maxvalue;
+}
+
+
+function copyPropertys(newPokemonObject, sourceObject, fields) {
+    for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        if (sourceObject[field]) newPokemonObject[field] = sourceObject[field];
+    }
+}
+
+
 function addPokemonTypes(newPokemonObject, pokemon) {
     newPokemonObject.type1 = pokemon.types[0].type.name;
-    newPokemonObject.type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : '';
+    newPokemonObject.type2 = pokemon.types.length > 1 ? pokemon.types[1].type.name : '---';
 }
 
 
@@ -102,7 +123,7 @@ function getPokemonCardHTML(pokemon) {
     return `
         <img class="pokemon_image" src="${pokemon.image}"
         style="background: linear-gradient(45deg, white 0%, ${getPokemonTypeColor(pokemon.type1)} 100%">
-        <span class="pokemon_name font_24b flex_grow_1">${getPascalCaseWord(pokemon.name)}</span>
+        <span class="pokemon_name font_24b flex_grow_1">${pokemon.name}</span>
         ${getPokemonTypesHTML(pokemon)}
     `;
 }
@@ -121,7 +142,7 @@ function getPascalCaseWord(word) {
 // some pokemons are missing sprites
 // in this case the default image is loaded
 function getPokemonImageUrlOrDefault(pokemon) {
-    const imgURL = pokemon['sprites']['front_default'];
+    const imgURL = pokemon['sprites']['other']['official-artwork']['front_default'];
     return imgURL ? imgURL : './img/pokemon.png';
 }
 
@@ -137,7 +158,7 @@ function getPokemonTypesHTML(pokemon) {
     let typesHTML = getTypeSpan(pokemon.type1) + getTypeSpan(pokemon.type2);
     return `
         <span class="font_16b p_1 border_t_b_1">Types</span>
-        <div class="pokemon_types ${pokemon.type2 ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">
+        <div class="pokemon_types ${pokemon.type2 != '---' ? 'flex_r_jsb_ace' : 'flex_r_jfs_ace'}">
             ${typesHTML}
         </div>
     `;
@@ -145,7 +166,7 @@ function getPokemonTypesHTML(pokemon) {
 
 
 function getTypeSpan(type) {
-    if (type == '') return '';
+    if (type == '---') return '';
     return `<span style="background-color: ${getPokemonTypeColor(type)}">${type}</span>`
 }
 
@@ -212,13 +233,30 @@ function renderPokemonsByFilter(filter) {
 
 function clickPokemonSmallCard(pokemonID) {
     stopPageScrolling();
-    const card = document.getElementById(pokemonID);
+    document.getElementById('overlay').style = 'display: flex;';
+    let pokemon = allPokemonJsons[pokemonID];
+    document.getElementById('pokemon_big_image').src = pokemon.image;
+    renderBigFields(pokemon);
+    document.getElementById('pokemon_biginfo').classList.add('pokemon_biginfo_show');
+}
+
+
+function renderBigFields(pokemon) {
+    const renderFields = ['name', 'type1', 'type2', 'height', 'weight', 'base_happiness', 'capture_rate', 'hatch_counter', 'hp', 'attack', 'speed', 'special-attack', 'special-defense', 'defense',];
+    for (let index = 0; index < renderFields.length; index++) {
+        const field = renderFields[index];
+        document.getElementById('pokemon_big_' + field).innerHTML = pokemon[field];
+    }
 }
 
 
 function clickOverlay() {
-    const card = document.getElementById('overlay').children[0];
+    document.getElementById('overlay').style = 'display: none;';
+    document.getElementById('pokemon_biginfo').classList.remove('pokemon_biginfo_show');
     allowPageScrolling();
 }
 
 
+function clickPokemonBigInfo(event) {
+    event.stopPropagation();
+}
