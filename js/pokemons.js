@@ -32,8 +32,20 @@ async function initPokemons() {
 }
 
 
-// get the pokemon JSON Object
-// save the loadet pokemons in array, for later use, it is needed
+async function loadPokemonList() {
+    const url = `https://pokeapi.co/api/v2/pokemon-species?limit=100000&offset=0`;
+    let response = await fetch(url);
+    let responseAsJson = await response.json();
+    all_PokeMons = responseAsJson.results;
+}
+
+
+/**
+ * get the pokemon JSON Object
+ * save the loadet pokemons in array, for later use, it is needed
+ * @param {*} pokemonID - pokemonJSON from pokemon-species fetch, only name an url property
+ * @returns - pokemonJSON Object
+ */
 async function getPokemonObjectByID(pokemonID) {
     if (!allPokemonJsons[pokemonID.name]) {
         let speciesJSON = await fetchAndGetJSON(pokemonID.url);
@@ -171,14 +183,6 @@ function getTypeSpan(type) {
 }
 
 
-async function loadPokemonList() {
-    const url = `https://pokeapi.co/api/v2/pokemon-species?limit=100000&offset=0`;
-    let response = await fetch(url);
-    let responseAsJson = await response.json();
-    all_PokeMons = responseAsJson.results;
-}
-
-
 function renderFirstPokemons() {
     lastShowPokemon = 0; // start by first pokemon
     document.getElementById('main_content').innerHTML = '';
@@ -210,7 +214,7 @@ function addNextEmptyCards(loadBegin, loadEnd) {
 
 function getNewEmptyCard(pokemonID) {
     return `
-        <div id="div_${pokemonID}" onclick="clickPokemonSmallCard('${pokemonID}')" class="pokemon_smallcard">
+        <div id="div_${pokemonID}" onclick="openBigCard('${pokemonID}')" class="pokemon_smallcard">
             <div class="pokemon_innercard" id="${pokemonID}"></div>
         </div>
         `;
@@ -231,13 +235,24 @@ function renderPokemonsByFilter(filter) {
 }
 
 
-function clickPokemonSmallCard(pokemonID) {
+function openBigCard(pokemonID) {
     stopPageScrolling();
-    document.getElementById('overlay').style = 'display: flex;';
-    let pokemon = allPokemonJsons[pokemonID];
+    showOverlay()
+    renderPokemonToBigcard(allPokemonJsons[pokemonID])
+    showPokemonBigCard();
+}
+
+
+function closeBigCard() {
+    hidePokemonBigCard();
+    hideOverlay();
+    allowPageScrolling();
+}
+
+
+function renderPokemonToBigcard(pokemon) {
     document.getElementById('pokemon_big_image').src = pokemon.image;
     renderBigFields(pokemon);
-    document.getElementById('pokemon_biginfo').classList.add('pokemon_biginfo_show');
 }
 
 
@@ -250,13 +265,5 @@ function renderBigFields(pokemon) {
 }
 
 
-function clickOverlay() {
-    document.getElementById('overlay').style = 'display: none;';
-    document.getElementById('pokemon_biginfo').classList.remove('pokemon_biginfo_show');
-    allowPageScrolling();
-}
-
-
-function clickPokemonBigInfo(event) {
-    event.stopPropagation();
-}
+function showPokemonBigCard() { document.getElementById('pokemon_biginfo').classList.add('pokemon_biginfo_show') }
+function hidePokemonBigCard() { document.getElementById('pokemon_biginfo').classList.remove('pokemon_biginfo_show') }

@@ -2,7 +2,7 @@
 /* variables */
 
 :root {
-    --scrollbar_color: green;
+    --scrollbar_color: #e46368;
     --scrollbar_bg_color: white;
 }
 
@@ -11,12 +11,12 @@
 .my_scrollbar {
     scrollbar-width: auto;
     scrollbar-color: var(--scrollbar_color) var(--scrollbar_bg_color);
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
 }
 
 /* Chrome, Edge, and Safari */
 .my_scrollbar::-webkit-scrollbar {
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
     width: 10px;
 }
 

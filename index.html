@@ -17,19 +17,19 @@
     <link rel="shortcut icon" href="./img/pokemon.png" type="image/x-icon">
 </head>
 
-<body onload="init()">
+<body class="my_scrollbar" onload="init()">
 
-    <section onclick="clickOverlay()" id="overlay" class="overlay flex_r_jce_ace" style="display: none;"></section>
+    <section onclick="closeBigCard()" id="overlay" class="overlay flex_r_jce_ace" style="display: none;"></section>
 
-    <div onclick="clickPokemonBigInfo(event)" id="pokemon_biginfo" class="pokemon_biginfo flex_c_jfs_ast">
-        <div class="border_b_b_1 pokemon_big_nameandimage flex_r_jfs_ace flex_gap_2 p_2 m_2">
+    <div onclick="preventClickEvent(event)" id="pokemon_biginfo" class="pokemon_biginfo flex_c_jfs_ast">
+        <div class="pokemon_big_nameandimage flex_r_jfs_ace flex_gap_2 p_2 m_2">
             <img id="pokemon_big_image" src="./img/pokemon.png">
             <span id="pokemon_big_name" class="font_24b">Name</span>
             <div class="flex_ast flex_grow_1 flex_r_jfe_afs">
-                <img onclick="clickOverlay()" src="./img/cancel.svg" alt="">
+                <img onclick="closeBigCard()" src="./img/cancel.svg" alt="">
             </div>
         </div>
-        <div id="pokemon_infos" class="pokemon_infos">
+        <div id="pokemon_infos" class="my_scrollbar pokemon_infos">
             <div class="pokemon_infobox flex_c_jfs_ast flex_gap_3 p_2 m_2">
                 <span class="border_b_b_1 font_24b flex_ace">Basics</span>
                 <div class="flex_r_jsb_ace">
