@@ -77,12 +77,12 @@
     margin-top: 10vh;
 }
 
-.pokemon_big_nameandimage > img {
+.pokemon_big_nameandimage>img {
     width: 100px;
     height: 100px;
 }
 
-.pokemon_big_nameandimage > div > img {
+.pokemon_big_nameandimage>div>img {
     width: 30px;
     height: 30px;
     padding: 5px;
@@ -90,7 +90,7 @@
     transition: background-color var(--main_anim_delay) ease-in-out;
 }
 
-.pokemon_big_nameandimage > div > img:hover {
+.pokemon_big_nameandimage>div>img:hover {
     cursor: pointer;
     background-color: lightgray;
 }
@@ -110,17 +110,42 @@
     width: 30%;
 }
 
+.pokemon_single_evolution {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: background-color var(--main_anim_delay) ease-in-out;
+}
+
+.pokemon_single_evolution_normal {
+    background-color: var(--main_bg_color_2);
+}
+
+.pokemon_single_evolution_highlight:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.pokemon_single_evolution>img {
+    width: 30px;
+    height: 30px;
+}
+
 @media (max-width: 700px) {
-    .pokemon_infos{
+    .pokemon_infos {
         flex-direction: column;
         overflow-y: auto;
     }
+
     .pokemon_infobox {
         height: 1000px;
         width: unset;
     }
-    .pokemon_big_nameandimage > img {
+
+    .pokemon_big_nameandimage>img {
         width: 50px;
         height: 50px;
-    }    
+    }
 }

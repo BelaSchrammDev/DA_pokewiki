@@ -47,6 +47,7 @@ async function loadPokemonList() {
  * @returns - pokemonJSON Object
  */
 async function getPokemonObjectByID(pokemonID) {
+    if (!pokemonID) return undefined;
     if (!allPokemonJsons[pokemonID.name]) {
         let speciesJSON = await fetchAndGetJSON(pokemonID.url);
         let evolutionJSON = await fetchAndGetJSON(speciesJSON.evolution_chain.url);
@@ -54,6 +55,11 @@ async function getPokemonObjectByID(pokemonID) {
         allPokemonJsons[pokemonID.name] = createNewPokemonObject(speciesJSON, pokemonJSON, evolutionJSON);
     }
     return allPokemonJsons[pokemonID.name];
+}
+
+
+function findPokemonID_ByName(pokemonName) {
+    return all_PokeMons.find(({ name }) => name === pokemonName);
 }
 
 
@@ -67,6 +73,7 @@ async function fetchAndGetJSON(url) {
 function createNewPokemonObject(species, pokemon, evolution) {
     let newPokemonObject = new Object();
     newPokemonObject.name = getPascalCaseWord(species.name);
+    newPokemonObject.pokemonID = species.name;
     addPokemonTypes(newPokemonObject, pokemon);
     copyPropertys(newPokemonObject, species, ['id', 'base_happiness', 'capture_rate', 'hatch_counter']);
     copyPropertys(newPokemonObject, pokemon, ['height', 'weight']);
@@ -238,7 +245,7 @@ function renderPokemonsByFilter(filter) {
 function openBigCard(pokemonID) {
     stopPageScrolling();
     showOverlay()
-    renderPokemonToBigcard(allPokemonJsons[pokemonID])
+    renderPokemonToBigcard(pokemonID);
     showPokemonBigCard();
 }
 
@@ -250,11 +257,32 @@ function closeBigCard() {
 }
 
 
-function renderPokemonToBigcard(pokemon) {
+async function renderPokemonToBigcard(pokemonID) {
+    const pokemon = allPokemonJsons[pokemonID];
     document.getElementById('pokemon_big_image').src = pokemon.image;
     renderBigFields(pokemon);
+    await renderEvolutions(pokemon);
 }
 
+
+async function renderEvolutions(pokemon) {
+    let evolutionsHTML = '';
+    for (let index = 0; index < pokemon.evolutions.length; index++) {
+        const pokemonName = pokemon.evolutions[index];
+        const pokemonEvoJSON = await getPokemonObjectByID(findPokemonID_ByName(pokemonName));
+        evolutionsHTML += getSingleEvolutionHTML(pokemon.name == pokemonEvoJSON.name, pokemonEvoJSON);
+    }
+    document.getElementById('pokemon_evolutions').innerHTML = evolutionsHTML;
+}
+
+
+function getSingleEvolutionHTML(selfPokemon, pokemonJSON) {
+    return `
+        <div class="pokemon_single_evolution${selfPokemon ? ' pokemon_single_evolution_normal"' : ` pokemon_single_evolution_highlight" onclick="renderPokemonToBigcard('${pokemonJSON.pokemonID}')"`}>
+            <img src="${pokemonJSON.image}">
+            <span>${pokemonJSON.name}</span>
+        </div>`;
+}
 
 function renderBigFields(pokemon) {
     const renderFields = ['name', 'type1', 'type2', 'height', 'weight', 'base_happiness', 'capture_rate', 'hatch_counter', 'hp', 'attack', 'speed', 'special-attack', 'special-defense', 'defense',];
