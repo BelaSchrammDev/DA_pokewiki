@@ -57,7 +57,7 @@ function scrollBehavior() {
 
     scrollContainer.addEventListener('wheel', function (event) {
         event.preventDefault();
-        scrollContainer.scrollTop += event.deltaY;
+        scrollContainer.scrollTop += event.deltaY / 7;
     });
 
     scrollContainer.addEventListener('touchstart', function (event) {

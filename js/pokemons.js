@@ -254,6 +254,7 @@ function closeBigCard() {
     hidePokemonBigCard();
     hideOverlay();
     allowPageScrolling();
+    setPokemonBigCardEvolutionHTML('');
 }
 
 
@@ -261,6 +262,7 @@ async function renderPokemonToBigcard(pokemonID) {
     const pokemon = allPokemonJsons[pokemonID];
     document.getElementById('pokemon_big_image').src = pokemon.image;
     renderBigFields(pokemon);
+    renderStats(pokemon);
     await renderEvolutions(pokemon);
 }
 
@@ -272,7 +274,12 @@ async function renderEvolutions(pokemon) {
         const pokemonEvoJSON = await getPokemonObjectByID(findPokemonID_ByName(pokemonName));
         evolutionsHTML += getSingleEvolutionHTML(pokemon.name == pokemonEvoJSON.name, pokemonEvoJSON);
     }
-    document.getElementById('pokemon_evolutions').innerHTML = evolutionsHTML;
+    setPokemonBigCardEvolutionHTML(evolutionsHTML);
+}
+
+
+function setPokemonBigCardEvolutionHTML(evoHTML) {
+    document.getElementById('pokemon_evolutions').innerHTML = evoHTML;
 }
 
 
@@ -280,12 +287,24 @@ function getSingleEvolutionHTML(selfPokemon, pokemonJSON) {
     return `
         <div class="pokemon_single_evolution${selfPokemon ? ' pokemon_single_evolution_normal"' : ` pokemon_single_evolution_highlight" onclick="renderPokemonToBigcard('${pokemonJSON.pokemonID}')"`}>
             <img src="${pokemonJSON.image}">
-            <span>${pokemonJSON.name}</span>
+            <span class="font_16b">${pokemonJSON.name}</span>
         </div>`;
 }
 
+
+function renderStats(pokemon) {
+    const renderFields = ['hp', 'attack', 'speed', 'special-attack', 'special-defense', 'defense',];
+    for (let index = 0; index < renderFields.length; index++) {
+        const field = renderFields[index];
+        const barElement = document.getElementById('pokemon_big_' + field);
+        barElement.innerHTML = pokemon[field];
+        barElement.style = `width: ${Math.min(pokemon[field], 100)}%`;
+    }
+}
+
+
 function renderBigFields(pokemon) {
-    const renderFields = ['name', 'type1', 'type2', 'height', 'weight', 'base_happiness', 'capture_rate', 'hatch_counter', 'hp', 'attack', 'speed', 'special-attack', 'special-defense', 'defense',];
+    const renderFields = ['name', 'type1', 'type2', 'height', 'weight', 'base_happiness', 'capture_rate', 'hatch_counter',];
     for (let index = 0; index < renderFields.length; index++) {
         const field = renderFields[index];
         document.getElementById('pokemon_big_' + field).innerHTML = pokemon[field];

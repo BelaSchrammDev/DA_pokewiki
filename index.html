@@ -61,32 +61,48 @@
                     <span id="pokemon_big_hatch_counter" class="font_16b"></span>
                 </div>
             </div>
-            <div class="pokemon_infobox flex_c_jfs_ast flex_gap_3 p_2 m_2">
+            <div class="pokemon_infobox flex_c_jfs_ast p_2 m_2">
                 <span class="border_b_b_1 font_24b flex_ace">Stats</span>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">HP:</span>
-                    <span id="pokemon_big_hp" class="font_16b"></span>
-                </div>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">Attack:</span>
-                    <span id="pokemon_big_attack" class="font_16b"></span>
-                </div>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">Defence:</span>
-                    <span id="pokemon_big_defense" class="font_16b"></span>
-                </div>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">Special Attack:</span>
-                    <span id="pokemon_big_special-attack" class="font_16b"></span>
-                </div>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">Special Defence:</span>
-                    <span id="pokemon_big_special-defense" class="font_16b"></span>
-                </div>
-                <div class="flex_r_jsb_ace">
-                    <span class="font_16b">Speed:</span>
-                    <span id="pokemon_big_speed" class="font_16b"></span>
-                </div>
+                <table class="pokemon_stats_table">
+                    <tbody class="font_16b">
+                        <tr>
+                            <td>HP:</td>
+                            <td>
+                                <div id="pokemon_big_hp" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Attack:</td>
+                            <td>
+                                <div id="pokemon_big_attack" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Defense:</td>
+                            <td>
+                                <div id="pokemon_big_defense" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Spezial <br> Attack:</td>
+                            <td>
+                                <div id="pokemon_big_special-attack" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Spezial <br> Defense:</td>
+                            <td>
+                                <div id="pokemon_big_special-defense" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Speed:</td>
+                            <td>
+                                <div id="pokemon_big_speed" class="pokemon_stat_bar"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="pokemon_infobox flex_c_jfs_ast p_2 m_2">
                 <span class="border_b_b_1 font_24b flex_ace">Evolutions</span>

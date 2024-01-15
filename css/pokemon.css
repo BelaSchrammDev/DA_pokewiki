@@ -129,9 +129,31 @@
 }
 
 .pokemon_single_evolution>img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
+
+.pokemon_stat_bar {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    background-color: var(--main_border_color);
+    transition: width var(--post_anim_delay) ease-in-out;
+}
+
+.pokemon_stats_table {
+    border-spacing: 5px;
+}
+
+.pokemon_stats_table td:first-child {
+    width: 55px;
+}
+
+.pokemon_stats_table td:last-child {}
 
 @media (max-width: 700px) {
     .pokemon_infos {
