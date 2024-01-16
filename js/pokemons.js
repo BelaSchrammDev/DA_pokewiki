@@ -1,34 +1,21 @@
 let all_PokeMons = [];
 let allPokemonJsons = {};
 let lastShowPokemon = 0;
-let big_CardPositionRect = null;
-const loadCount = 40;
-const typeColors = {
-    normal: '#A8A77A',
-    fire: '#EE8130',
-    water: '#6390F0',
-    electric: '#F7D02C',
-    grass: '#7AC74C',
-    ice: '#96D9D6',
-    fighting: '#C22E28',
-    poison: '#A33EA1',
-    ground: '#E2BF65',
-    flying: '#A98FF3',
-    psychic: '#F95587',
-    bug: '#A6B91A',
-    rock: '#B6A136',
-    ghost: '#735797',
-    dragon: '#6F35FC',
-    dark: '#705746',
-    steel: '#B7B7CE',
-    fairy: '#D685AD',
-};
 
 
 async function initPokemons() {
     await loadPokemonList()
     renderFirstPokemons();
     addLoadByScrollBehavior();
+    setPokemonBigCardEvolutionHTML();
+}
+
+
+function addLoadByScrollBehavior() {
+    window.addEventListener('scroll', () => {
+        const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+        if (lastShowPokemon < all_PokeMons.length && (scrollTop + clientHeight) >= scrollHeight - 100) renderNextPokemons();
+    });
 }
 
 
@@ -58,9 +45,7 @@ async function getPokemonObjectByID(pokemonID) {
 }
 
 
-function findPokemonID_ByName(pokemonName) {
-    return all_PokeMons.find(({ name }) => name === pokemonName);
-}
+function findPokemonID_ByName(pokemonName) { return all_PokeMons.find(({ name }) => name === pokemonName); }
 
 
 async function fetchAndGetJSON(url) {
@@ -69,7 +54,7 @@ async function fetchAndGetJSON(url) {
 }
 
 
-// pull all required data from the api into a separate object
+// pull all required data from the api into a separate JSON object
 function createNewPokemonObject(species, pokemon, evolution) {
     let newPokemonObject = new Object();
     newPokemonObject.name = getPascalCaseWord(species.name);
@@ -111,7 +96,6 @@ function addPokemonTypes(newPokemonObject, pokemon) {
 
 function getEvolutionsArray(evolution) {
     let evoArray = [];
-
     evoArray.push(evolution.chain.species.name);
     if (evolution.chain.evolves_to.length > 0) {
         evoArray.push(evolution.chain.evolves_to[0].species.name);
@@ -120,14 +104,6 @@ function getEvolutionsArray(evolution) {
         }
     }
     return evoArray;
-}
-
-
-function addLoadByScrollBehavior() {
-    window.addEventListener('scroll', () => {
-        const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-        if (lastShowPokemon < all_PokeMons.length && (scrollTop + clientHeight) >= scrollHeight - 100) renderNextPokemons();
-    });
 }
 
 
@@ -167,6 +143,26 @@ function getPokemonImageUrlOrDefault(pokemon) {
 
 
 function getPokemonTypeColor(type) {
+    const typeColors = {
+        normal: '#A8A77A',
+        fire: '#EE8130',
+        water: '#6390F0',
+        electric: '#F7D02C',
+        grass: '#7AC74C',
+        ice: '#96D9D6',
+        fighting: '#C22E28',
+        poison: '#A33EA1',
+        ground: '#E2BF65',
+        flying: '#A98FF3',
+        psychic: '#F95587',
+        bug: '#A6B91A',
+        rock: '#B6A136',
+        ghost: '#735797',
+        dragon: '#6F35FC',
+        dark: '#705746',
+        steel: '#B7B7CE',
+        fairy: '#D685AD',
+    };
     if (type == undefined) return '#FFFFFF';
     if (typeColors.hasOwnProperty(type)) return typeColors[type];
     else typeColors.normal;
@@ -198,6 +194,7 @@ function renderFirstPokemons() {
 
 
 function renderNextPokemons() {
+    const loadCount = 40;
     if (lastShowPokemon == -1) return; // pokemonsearch is active
     const loadBegin = lastShowPokemon;
     const loadEnd = lastShowPokemon + loadCount;
@@ -254,7 +251,7 @@ function closeBigCard() {
     hidePokemonBigCard();
     hideOverlay();
     allowPageScrolling();
-    setPokemonBigCardEvolutionHTML('');
+    setPokemonBigCardEvolutionHTML();
 }
 
 
@@ -279,7 +276,7 @@ async function renderEvolutions(pokemon) {
 
 
 function setPokemonBigCardEvolutionHTML(evoHTML) {
-    document.getElementById('pokemon_evolutions').innerHTML = evoHTML;
+    document.getElementById('pokemon_evolutions').innerHTML = evoHTML ? evoHTML : '<span>Loading...</span>';
 }
 
 
@@ -309,6 +306,32 @@ function renderBigFields(pokemon) {
         const field = renderFields[index];
         document.getElementById('pokemon_big_' + field).innerHTML = pokemon[field];
     }
+}
+
+
+function clickShowFiltered() {
+    renderPokemonsByFilter(document.getElementById('search_inputField').value.toLowerCase());
+}
+
+function searchKeyChange() {
+    const newFilter = document.getElementById('search_inputField').value.toLowerCase();
+    setFilterCount(newFilter);
+}
+
+
+function setFilterCount(filter) {
+    const newFilter = filter.toLowerCase();
+    let filterCount = 0;
+    all_PokeMons.forEach(element => { if (element.name.includes(newFilter)) filterCount++; });
+    setFilterButton(filter, filterCount);
+}
+
+
+function setFilterButton(filter, filterCount) {
+    const showBTN = document.getElementById('search_showBTN');
+    showBTN.style = `left: ${filter == '' ? 0 : 130}px`;
+    showBTN['disabled'] = filterCount == 0;
+    showBTN.innerHTML = (filter == '' ? 0 : filterCount) + ' Treffer';
 }
 
 
