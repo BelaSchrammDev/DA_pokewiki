@@ -76,7 +76,7 @@ function copyStats(newPokemonObject, stats) {
         newPokemonObject[statItem.stat.name] = statItem.base_stat;
         if (stat_maxvalue < statItem.base_stat) stat_maxvalue = statItem.base_stat;
     }
-    newPokemonObject['stat_maxvalue'] = stat_maxvalue;
+    newPokemonObject['stat_maxvalue'] = Math.max(100, stat_maxvalue);
 }
 
 
@@ -296,6 +296,7 @@ function renderStats(pokemon) {
         const barElement = document.getElementById('pokemon_big_' + field);
         barElement.innerHTML = pokemon[field];
         barElement.style = `width: ${Math.min(pokemon[field], 100)}%`;
+        barElement.style = `width: ${pokemon[field] * 100 / pokemon['stat_maxvalue']}%`;
     }
 }
 
