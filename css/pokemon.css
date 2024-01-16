@@ -166,6 +166,7 @@
     border-radius: 1000px;
     border: 1px solid var(--main_border_color);
     box-sizing: border-box;
+    padding-left: 10px;
 }
 
 .search_div>input:focus {
@@ -184,6 +185,7 @@
     height: 100%;
     width: 100px;
     transition: left 125ms ease-in-out;
+    cursor: pointer;
 }
 
 @media (max-width: 700px) {

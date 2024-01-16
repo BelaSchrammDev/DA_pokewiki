@@ -313,6 +313,7 @@ function renderBigFields(pokemon) {
 
 function clickShowFiltered() {
     renderPokemonsByFilter(document.getElementById('search_inputField').value.toLowerCase());
+    setFilterCount('');
 }
 
 function searchKeyChange() {
