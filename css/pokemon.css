@@ -158,16 +158,31 @@
 .search_div {
     position: relative;
     width: 130px;
-    height: 20px;
+    height: 25px;
+}
+
+.search_div>input {
+    height: 100%;
+    border-radius: 1000px;
+    border: 1px solid var(--main_border_color);
+    box-sizing: border-box;
+}
+
+.search_div>input:focus {
+    outline: none;
 }
 
 .search_div>button {
+    text-align: right;
+    border-radius: 1000px;
+    border: 1px solid var(--main_border_color);
+    height: 100%;
     position: absolute;
     z-index: -1;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 80px;
+    height: 100%;
+    width: 100px;
     transition: left 125ms ease-in-out;
 }
 

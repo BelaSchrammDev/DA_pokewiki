@@ -1,6 +1,7 @@
 let all_PokeMons = [];
 let allPokemonJsons = {};
 let lastShowPokemon = 0;
+let searchInputWidth = 130;
 
 
 async function initPokemons() {
@@ -315,7 +316,9 @@ function clickShowFiltered() {
 }
 
 function searchKeyChange() {
-    const newFilter = document.getElementById('search_inputField').value.toLowerCase();
+    const searchInput = document.getElementById('search_inputField');
+    const newFilter = searchInput.value.toLowerCase();
+    searchInputWidth = searchInput.clientWidth - searchInput.clientHeight;
     setFilterCount(newFilter);
 }
 
@@ -330,9 +333,9 @@ function setFilterCount(filter) {
 
 function setFilterButton(filter, filterCount) {
     const showBTN = document.getElementById('search_showBTN');
-    showBTN.style = `left: ${filter == '' ? 0 : 130}px`;
+    showBTN.style = `left: ${filter == '' ? 0 : searchInputWidth}px`;
     showBTN['disabled'] = filterCount == 0;
-    showBTN.innerHTML = (filter == '' ? 0 : filterCount) + ' Treffer';
+    showBTN.innerHTML = (filter == '' ? 0 : filterCount) + ' found';
 }
 
 
