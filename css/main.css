@@ -85,6 +85,16 @@ header {
     top: 0;
 }
 
+header>div {
+    margin-left: auto;
+    margin-right: auto;
+
+    max-width: var(--main_section_max_width);
+    width: var(--main_section_width);
+
+    z-index: -2;
+}
+
 header span {
     color: var(--main_color);
     vertical-align: middle;

@@ -31,6 +31,7 @@ async function loadPokemonList() {
 /**
  * get the pokemon JSON Object
  * save the loadet pokemons in array, for later use, it is needed
+ * 
  * @param {*} pokemonID - pokemonJSON from pokemon-species fetch, only name an url property
  * @returns - pokemonJSON Object
  */
@@ -188,8 +189,7 @@ function getTypeSpan(type) {
 
 
 function renderFirstPokemons() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    scrollToTop();
     lastShowPokemon = 0; // start by first pokemon
     document.getElementById('main_content').innerHTML = '';
     renderNextPokemons();
@@ -299,7 +299,6 @@ function renderStats(pokemon) {
         const field = renderFields[index];
         const barElement = document.getElementById('pokemon_big_' + field);
         barElement.innerHTML = pokemon[field];
-        barElement.style = `width: ${Math.min(pokemon[field], 100)}%`;
         barElement.style = `width: ${pokemon[field] * 100 / pokemon['stat_maxvalue']}%`;
     }
 }
@@ -315,6 +314,7 @@ function renderBigFields(pokemon) {
 
 
 function clickShowFiltered() {
+    scrollToTop();
     renderPokemonsByFilter(document.getElementById('search_inputField').value.toLowerCase());
     setFilterCount('');
     setShowAllButton();
@@ -352,6 +352,11 @@ function setFilterButton(filter, filterCount) {
     showBTN.innerHTML = filterCount == 0 ? '0 found' : ('show ' + (filter == '' ? 0 : filterCount) + ' hits');
 }
 
+
+function scrollToTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
 
 function showPokemonBigCard() { document.getElementById('pokemon_biginfo').classList.add('pokemon_biginfo_show') }
 function hidePokemonBigCard() { document.getElementById('pokemon_biginfo').classList.remove('pokemon_biginfo_show') }
