@@ -189,6 +189,7 @@ function getTypeSpan(type) {
 
 
 function renderFirstPokemons() {
+    document.getElementById('search_inputField').value = '';
     scrollToTop();
     lastShowPokemon = 0; // start by first pokemon
     document.getElementById('main_content').innerHTML = '';
