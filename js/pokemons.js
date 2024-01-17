@@ -188,9 +188,12 @@ function getTypeSpan(type) {
 
 
 function renderFirstPokemons() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     lastShowPokemon = 0; // start by first pokemon
     document.getElementById('main_content').innerHTML = '';
     renderNextPokemons();
+    setShowAllButton();
 }
 
 
@@ -314,7 +317,9 @@ function renderBigFields(pokemon) {
 function clickShowFiltered() {
     renderPokemonsByFilter(document.getElementById('search_inputField').value.toLowerCase());
     setFilterCount('');
+    setShowAllButton();
 }
+
 
 function searchKeyChange() {
     const searchInput = document.getElementById('search_inputField');
@@ -332,11 +337,19 @@ function setFilterCount(filter) {
 }
 
 
+function setShowAllButton() {
+    const showallBTN = document.getElementById('search_showallBTN');
+    if (!showallBTN) return;
+    showallBTN['disabled'] = lastShowPokemon != -1;
+    showallBTN.style = `visibility: ${lastShowPokemon != -1 ? 'hidden' : 'visible'};`;
+}
+
+
 function setFilterButton(filter, filterCount) {
     const showBTN = document.getElementById('search_showBTN');
     showBTN.style = `left: ${filter == '' ? 0 : searchInputWidth}px`;
     showBTN['disabled'] = filterCount == 0;
-    showBTN.innerHTML = (filter == '' ? 0 : filterCount) + ' found';
+    showBTN.innerHTML = filterCount == 0 ? '0 found' : ('show ' + (filter == '' ? 0 : filterCount) + ' hits');
 }
 
 
